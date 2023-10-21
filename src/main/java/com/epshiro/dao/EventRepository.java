@@ -37,6 +37,13 @@ public class EventRepository {
 
     public Event deleteEvent(Long eventID) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        return em.find(Event.class, eventID);
+        em.getTransaction().begin();
+        Event event = em.find(Event.class, eventID);
+        if (event != null) {
+            em.remove(event);
+        }
+        em.getTransaction().commit();
+        em.close();
+        return event;
     }
 }
